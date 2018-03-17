@@ -23,10 +23,9 @@ const SignedIn = DrawerNavigator(
             path:'/fila',
             screen: Fila,
         }
-
     },
     {
-        initialRouteName:'Home',
+        initialRouteName:'Fila',
         drawerPosition:'left',
         drawerWidth: 300,
         contentOptions:{

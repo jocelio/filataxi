@@ -1,13 +1,13 @@
 /**
  * Created by jocelio on 14/02/18.
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { connect } from 'react-redux';
-import {Text, View, ListView, ActivityIndicator, StyleSheet, Alert,TouchableHighlight} from "react-native";
-import {Button, Container, Content} from 'native-base'
+import { Text, View, ListView, ActivityIndicator, StyleSheet, Alert, TouchableHighlight } from "react-native";
+import { Button, Container, Content } from 'native-base'
 import MenuSettings from "../common/MenuSettings";
 import CustomHeader from '../common/CustomHeader'
-import {onSignOut} from "../../auth/auth";
+import { onSignOut } from "../../auth/auth";
 import SortableListView from 'react-native-sortable-listview'
 
 import { getData } from '../../actions';
@@ -98,10 +98,7 @@ class Home extends Component {
 
              </View>
          </View>
-
       </TouchableHighlight>
-
-
       )
     }
 

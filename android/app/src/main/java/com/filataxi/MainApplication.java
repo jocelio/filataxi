@@ -1,4 +1,4 @@
-package com.awesomeproject;
+package com.filataxi;
 
 import android.app.Application;
 
