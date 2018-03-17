@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
         , backgroundColor:'#f1c40f'
     },
     logo:{
-        width:110
-        , height:110
+          width:180
+        , height:180
     },
     text:{
         color:'#fff'
