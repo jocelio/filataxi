@@ -3,7 +3,7 @@
  */
 import React, {Component} from "react";
 import { connect } from 'react-redux';
-import {Text, View, ListView, ActivityIndicator, StyleSheet, TouchableHighlight} from "react-native";
+import {Text, View, ListView, ActivityIndicator, StyleSheet, TouchableHighlight, Alert} from "react-native";
 import {Button, Container, Content, List, ListItem} from 'native-base'
 import MenuSettings from "../common/MenuSettings";
 import CustomHeader from '../common/CustomHeader'
@@ -45,18 +45,27 @@ class Fila extends Component {
             :
             <View style={{backgroundColor: '#F5F5F5', paddingTop:20, height:'100%' }}>
                 <SortableListView
+                 moveOnPressIn={true}
                  limitScrolling={true}
                   style={{ flex: 1 }}
                   data={this.props.filaList}
                   order={order}
                   onRowMoved={e => {
                     if(e.to === 0) return;
-                    const {id} = e.row.data
-
-                    this.props.move({id, positions: e.from-e.to})
-
-                    order.splice(e.to, 0, order.splice(e.from, 1)[0])
-                    this.forceUpdate()
+                    Alert.alert(
+                      'Movimentação',
+                      'Deseja realmente realizar essa movimentação?',
+                      [
+                        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                        {text: 'OK', onPress: () => {
+                          const {id} = e.row.data
+                          this.props.move({id, positions: e.from-e.to})
+                          order.splice(e.to, 0, order.splice(e.from, 1)[0])
+                          //this.forceUpdate()
+                        }},
+                      ],
+                      { cancelable: false }
+                    )
                   }}
                   renderRow={(row) => this.renderRow(row)}
                 />
