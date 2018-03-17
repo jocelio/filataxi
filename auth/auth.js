@@ -3,8 +3,6 @@
  */
 import {AsyncStorage} from "react-native";
 
-export const USER_KEY = "auth-key";
-
 export const onSignOut = () => AsyncStorage.multiRemove(["userdata","access_token"]);
 
 export const isSignedIn = () => {
