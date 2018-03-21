@@ -6,6 +6,7 @@ import { combineReducers } from 'redux';
 
 import LoginReducer from './login'
 import FilaReducer from './fila'
+import DriverReducer from './driver'
 
 import { DATA_AVAILABLE } from "../actions/"
 
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
     state: (state = {}) => state,
     dataReducer: dataReducer,
     loginReducer: LoginReducer,
-    filaReducer: FilaReducer
+    filaReducer: FilaReducer,
+    driverReducer: DriverReducer
 })
 
 export default rootReducer;

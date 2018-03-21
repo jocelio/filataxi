@@ -107,6 +107,5 @@ const styles = StyleSheet.create({
         , color:'#FFF'
         , paddingHorizontal:10
         , fontSize: 20
-
     }
 })

@@ -5,9 +5,9 @@ import React, {Component} from "react";
 import { connect } from 'react-redux';
 import {Text, View, ListView, ActivityIndicator, StyleSheet, TouchableHighlight, Alert} from "react-native";
 import {Button, Container, Content, List, ListItem, Card, Form, Picker, Item} from 'native-base'
-import MenuSettings from "../common/MenuSettings";
+import MenuSettings from "../common/MenuSettings"
 import CustomHeader from '../common/CustomHeader'
-import { getFila, move, changeStatus, moveHead } from "../../actions/fila";
+import { getFila, move, changeStatus, moveHead } from "../../actions/fila"
 import SortableListView from 'react-native-sortable-listview'
 
 

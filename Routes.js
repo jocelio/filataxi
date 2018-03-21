@@ -3,11 +3,12 @@
  */
 import React from 'react';
 import {DrawerNavigator, StackNavigator, TabNavigator} from 'react-navigation';
+import CustomDrawerContent from './containers/common/CustomDrawerContent'
 import FirstScreen from './containers/screens/FirstScreen'
 import AppLogin from './containers/screens/AppLogin'
 import Home from './containers/screens/Home'
-import CustomDrawerContent from './containers/common/CustomDrawerContent'
-import Fila from "./containers/screens/Fila";
+import Fila from "./containers/screens/Fila"
+import Driver from "./containers/screens/Driver"
 
 const SignedIn = DrawerNavigator(
     {
@@ -22,10 +23,14 @@ const SignedIn = DrawerNavigator(
         Fila:{
             path:'/fila',
             screen: Fila,
+        },
+        Driver:{
+            path:'/driver',
+            screen: Driver,
         }
     },
     {
-        initialRouteName:'Home',
+        initialRouteName:'Driver',
         drawerPosition:'left',
         drawerWidth: 300,
         contentOptions:{
