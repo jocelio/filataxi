@@ -2,7 +2,7 @@
  * Created by jocelio on 17/02/18.
  */
 import React, {Component} from 'react'
-import {StyleSheet, View, TextInput, Text, Alert, AsyncStorage} from 'react-native'
+import {StyleSheet, View, TextInput, Text, Alert, AsyncStorage, ActivityIndicator} from 'react-native'
 import { Button } from 'native-base'
 import { login, userInfo } from "../actions/login";
 import { connect } from "react-redux";
@@ -11,7 +11,7 @@ class LoginForm extends Component {
 
     constructor(props){
         super(props)
-        this.state = {user:''}
+        this.state = {user:'', loading: false}
     }
 
     render() {
@@ -39,21 +39,28 @@ class LoginForm extends Component {
             </View>
             <View style={{backgroundColor: 'red', alignItems: 'center', justifyContent: 'center'}}>
                 <Button title={'Login'}
+                        disabled={this.state.loading}
                         onPress={() => this.doLogin()} full>
-                    <Text style={styles.button}>Entrar </Text>
+                    {(this.state.loading)
+                      ?  <ActivityIndicator
+                          animating={true}
+                          style={[{height: 80, width:80}]}
+                          size="small"/>
+                          : <Text style={styles.button}>{'Login'} </Text>}
                 </Button>
             </View>
         </View>
     }
 
     doLogin(){
-
+        this.setState({loading: true})
         this.props.login({
             "username": this.state.user || 'jclls@hotmail.com',
             "password": this.state.password || 'zgyMTNjYjI3Yzc5ZjA'
         }).then(() => {
             if (!this.props.loginData || !this.props.loginData.access_token) {
                 Alert.alert("Usuário ou senha incorretos.")
+                throw "Usuário ou senha incorretos."
                 return;
             }
 
@@ -63,8 +70,12 @@ class LoginForm extends Component {
         }).then(() => {
             return AsyncStorage.setItem("userInfo", JSON.stringify(this.props.userInfoData))
         }).then(() => {
+            this.setState({loading: false})
             return this.props.navigation.navigate("SignedIn")
-        }).catch( e => console.log(e))
+        }).catch( e =>{
+           this.setState({loading: false})
+           console.log(e)
+        })
     }
 
 }

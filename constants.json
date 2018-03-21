@@ -1,5 +1,5 @@
 {
   "urls": {
-    "api":"http://localhost:8090/"
+    "api":"https://filataxi-api.herokuapp.com"
   }
 }

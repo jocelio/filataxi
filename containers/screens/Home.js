@@ -48,7 +48,6 @@ class Home extends Component {
                   data={this.props.data}
                   order={order}
                   onRowMoved={e => {
-                    console.log(e.to, e.from)
                     order.splice(e.to, 0, order.splice(e.from, 1)[0])
                     this.forceUpdate()
                   }}

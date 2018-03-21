@@ -4,10 +4,10 @@
 import React, {Component} from "react";
 import { connect } from 'react-redux';
 import {Text, View, ListView, ActivityIndicator, StyleSheet, TouchableHighlight, Alert} from "react-native";
-import {Button, Container, Content, List, ListItem} from 'native-base'
+import {Button, Container, Content, List, ListItem, Card, Form, Picker, Item} from 'native-base'
 import MenuSettings from "../common/MenuSettings";
 import CustomHeader from '../common/CustomHeader'
-import { getFila, move } from "../../actions/fila";
+import { getFila, move, changeStatus, moveHead } from "../../actions/fila";
 import SortableListView from 'react-native-sortable-listview'
 
 
@@ -51,7 +51,8 @@ class Fila extends Component {
                   data={this.props.filaList}
                   order={order}
                   onRowMoved={e => {
-                    if(e.to === 0) return;
+
+                    if(e.to === 0 || e.to > e.from) return;
                     Alert.alert(
                       'Movimentação',
                       'Deseja realmente realizar essa movimentação?',
@@ -90,25 +91,60 @@ class Fila extends Component {
     renderRow(rowData){
       return (
         <TouchableHighlight underlayColor={'green'} style={{backgroundColor: "#F8F8F8"}}>
-          <View style={styles.row}>
+          <Card style={styles.row}>
             <View style={styles.boxNumber} >
                <Text style={styles.titleNumber}>
-                   {rowData.position}
+                   {rowData.index}
                </Text>
             </View>
             <View style={styles.boxText} >
                 <Text style={styles.title}>
-                     {rowData.taxiDriver.name}
+                     {rowData.driver.name}
                  </Text>
             </View>
+
             <View style={styles.boxOpt} >
-                {(rowData.position === 1) &&
-                     <Button style={{paddingLeft:8, paddingRight:8}}><Text>Fila</Text></Button>
-                 }
+                  <Button style={{width:'100%', justifyContent: 'center'}}>
+                      <Picker
+                        textStyle={{color:'white', fontWeight:'bold', fontSize:12}}
+                        mode="dropdown"
+                        placeholder={rowData.status}
+                        iosHeader="Status"
+                        mode="dropdown"
+                        selectedValue={rowData.status}
+                        onValueChange={value => this.onValueChange(value, rowData)}
+                      >
+                        {rowData.index === 1 && rowData.status === 'RODANDO'? this.renderStatusSuper() : this.renderStatusItems()}
+                      </Picker>
+                  </Button>
+
             </View>
-         </View>
+         </Card>
       </TouchableHighlight>
       )
+    }
+
+    renderStatusSuper(){
+        return [ <Item label="RODANDO" value="RODANDO" />
+                , <Item label="CHEGOU" value="CHEGOU" />]
+    }
+
+    renderStatusItems(){
+        return [ <Item label="AGUARDANDO" value="AGUARDANDO" />
+                , <Item label="RODANDO" value="RODANDO" /> ]
+    }
+
+    onValueChange(value, rowData){
+        if(value === "CHEGOU"){
+          this.props.changeStatus(rowData.id).then(() =>  {
+            this.props.moveHead()
+          })
+          return;
+        }
+
+        this.props.changeStatus(rowData.id).then(() => {
+          this.props.getFila()
+        })
     }
 
 }
@@ -119,26 +155,26 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { getFila, move })(Fila)
+export default connect(mapStateToProps, { getFila, move, changeStatus, moveHead })(Fila)
 
 
 const styles = StyleSheet.create({
     boxNumber:{
       alignItems: 'center',
       justifyContent: 'center',
-      width: '20%',
+      width: '14%',
       padding: 4,
       backgroundColor: '#1B9CFC'
     },
     boxText:{
       padding:3,
       justifyContent: 'center',
-      width: '65%', backgroundColor: '#25CCF7'
+      width: '50%', backgroundColor: '#F1F1F1'
     },
     boxOpt:{
       padding:3,
       justifyContent: 'center',
-      width: '15%', backgroundColor: '#25CCF7'
+      width: '36%', backgroundColor: '#F1F1F1'
     },
     activityIndicatorContainer:{
         backgroundColor: "#fff",
