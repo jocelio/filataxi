@@ -9,6 +9,7 @@ import AppLogin from './containers/screens/AppLogin'
 import Home from './containers/screens/Home'
 import Fila from "./containers/screens/Fila"
 import Driver from "./containers/screens/Driver"
+import DriverNew from "./components/DriverNew"
 
 const SignedIn = DrawerNavigator(
     {
@@ -26,7 +27,10 @@ const SignedIn = DrawerNavigator(
         },
         Driver:{
             path:'/driver',
-            screen: Driver,
+            screen: StackNavigator({
+                    Driver: { screen: Driver, navigationOptions: { header:false }},
+                    DriverNew: { screen: DriverNew, navigationOptions: { title:'Novo Motorista' } }
+                  }),
         }
     },
     {

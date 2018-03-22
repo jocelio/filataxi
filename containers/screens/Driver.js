@@ -28,6 +28,8 @@ class Driver extends Component {
 
     render() {
 
+      const { navigate } = this.props.navigation;
+
       const comp = (this.state.loading) ?
           <View style={styles.activityIndicatorContainer}>
               <ActivityIndicator
@@ -64,9 +66,6 @@ class Driver extends Component {
                     {comp}
                   </View>
 
-
-
-
                 </Content>
                 <Fab
                 active={this.state.active}
@@ -74,7 +73,7 @@ class Driver extends Component {
                 containerStyle={{ }}
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
-                onPress={() => this.setState({ active: !this.state.active })}>
+                onPress={() => navigate('DriverNew', { name: 'Jane' }) }>
                  <MaterialIcons name='add' size={24} />
                 </Fab>
             </Container>
