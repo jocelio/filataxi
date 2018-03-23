@@ -89,7 +89,7 @@ class Fila extends Component {
 
     renderRow(rowData){
       return (
-        <TouchableHighlight underlayColor={'green'} style={{backgroundColor: "#F8F8F8"}}>
+        <TouchableHighlight underlayColor={'green'} style={{backgroundColor: "#F8F8F8"}} key={rowData.id}>
           <Card style={styles.row}>
             <View style={styles.boxNumber} >
                <Text style={styles.titleNumber}>
@@ -123,13 +123,13 @@ class Fila extends Component {
     }
 
     renderStatusSuper(){
-        return [ <Item label="RODANDO" value="RODANDO" />
-                , <Item label="CHEGOU" value="CHEGOU" />]
+        return [ <Item label="RODANDO" value="RODANDO" key={1}/>
+                , <Item label="CHEGOU" value="CHEGOU" key={2}/>]
     }
 
     renderStatusItems(){
-        return [ <Item label="AGUARDANDO" value="AGUARDANDO" />
-                , <Item label="RODANDO" value="RODANDO" /> ]
+        return [ <Item label="AGUARDANDO" value="AGUARDANDO" key={1} />
+                , <Item label="RODANDO" value="RODANDO" key={2} /> ]
     }
 
     onValueChange(value, rowData){
