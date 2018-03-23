@@ -98,8 +98,6 @@ class Driver extends Component {
     }
 
     action(value, driver){
-      console.log(value)
-
       switch (value) {
           case 0:
               this.props.navigation.navigate('DriverNew', { driver });

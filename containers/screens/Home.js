@@ -58,27 +58,6 @@ class Home extends Component {
         );
     }
 
-    renderRow(rowData, some){
-      console.log(some)
-      return (
-        <TouchableHighlight underlayColor={'green'} style={{backgroundColor: "#F8F8F8"}}>
-          <View style={styles.row}>
-            <View style={styles.boxNumber} >
-               <Text style={styles.titleNumber}>
-                   {(1)}
-               </Text>
-            </View>
-             <View style={styles.boxText} >
-                <Text style={styles.title}>
-                     {rowData.title}
-                 </Text>
-
-             </View>
-         </View>
-      </TouchableHighlight>
-      )
-    }
-
 }
 
 function mapStateToProps(state) {

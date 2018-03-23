@@ -20,7 +20,6 @@ export default class App extends Component{
     componentWillMount() {
         isSignedIn()
             .then(res => {
-              console.log(res)
               this.setState({ signedIn: res, checkedSignIn: true })
             })
             .catch(err => Alert.alert("An error occurred"));
