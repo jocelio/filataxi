@@ -21,7 +21,7 @@ const SignedIn = DrawerNavigator(
             path:'/fila',
             screen: Fila,
         },
-        Driver:{
+        Motorista:{
             path:'/driver',
             screen: StackNavigator({
                     Driver: { screen: Driver, navigationOptions: { header:false }},
