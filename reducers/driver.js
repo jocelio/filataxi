@@ -1,4 +1,4 @@
-import { GET_DRIVERS, SAVE_DRIVER, UPDATE_DRIVER, REMOVE_DRIVER } from "../actions/driver";
+import { GET_DRIVERS, SAVE_DRIVER, UPDATE_DRIVER, REMOVE_DRIVER, TOGGLE_DRIVER } from "../actions/driver";
 
 
 export default (state = [], action) => {
@@ -13,6 +13,8 @@ export default (state = [], action) => {
             return {...state, driverList: [...state.driverList.filter(f => f.id != action.payload.data.id), action.payload.data]}
         case REMOVE_DRIVER:
             return {...state, driverList: state.driverList.filter(f => f.id != action.driver_id)}
+        case TOGGLE_DRIVER:
+            return {...state, driverList: [...state.driverList.filter(f => f.id != action.payload.data.id), action.payload.data]}
 
 
         default:

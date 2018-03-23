@@ -9,7 +9,7 @@ export const INIT_DRIVER = 'INIT_DRIVER'
 export const UPDATE_DRIVER = 'UPDATE_DRIVER'
 export const ENQUEUE_DRIVER = 'ENQUEUE_DRIVER'
 export const REMOVE_DRIVER = 'REMOVE_DRIVER'
-
+export const TOGGLE_DRIVER = 'TOGGLE_DRIVER'
 
 const axios = axiosInstance();
 
@@ -43,3 +43,12 @@ export const removeDriver = driver => ({
       payload: axios.delete(`/driver/${driver.id}`),
       driver_id: driver.id
 })
+
+export const toggleStatus = driver => {
+  const endPoint = driver.enabled? 'disable': 'enable'
+
+  return {
+      type: TOGGLE_DRIVER,
+      payload: axios.post(`/driver/${endPoint}/${driver.id}`)
+  }
+}

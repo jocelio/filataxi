@@ -9,7 +9,7 @@ import _ from 'lodash'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MenuSettings from "../common/MenuSettings";
 import CustomHeader from '../common/CustomHeader'
-import { getDrivers, initDrivers, enqueueDrivers, removeDriver } from "../../actions/driver"
+import { getDrivers, removeDriver, toggleStatus } from "../../actions/driver"
 
 
 
@@ -25,15 +25,7 @@ class Driver extends Component {
     componentDidMount() {
         this.setState({loading:true})
         this.props.getDrivers().then(() => {
-          if(_.isEmpty(this.props.driverList)){
-              this.setState({loading:true})
-              this.props.initDrivers().then(() => {
-                return this.props.enqueueDrivers()
-              }).then( () =>
-              this.props.getDrivers().then(() => this.setState({loading:false}))
-            )
-          }
-          this.setState({loading:false})
+            this.setState({loading:false})
         });
     }
 
@@ -56,15 +48,15 @@ class Driver extends Component {
              <Thumbnail square size={80} source={{ uri: 'https://conteudo.startse.com.br/wp-content/uploads/2016/02/6208_2_L.jpg' }} />
                <Body>
                  <Text>{driver.name}</Text>
-                 <Text note> {driver.email} - Ativo </Text>
+                 <Text note> {driver.email} - {driver.enabled?'Ativo':'Inativo'} </Text>
                </Body>
                <Right>
                   <TouchableHighlight underlayColor={'gray'}
                       onPress={() => ActionSheet.show(
                           {
-                            options: ["Editar", "Excluir","Desativar","Cancel"],
+                            options: ["Editar", "Excluir", driver.enabled? "Desativar": 'Ativar',"Cancel"],
                             cancelButtonIndex: 4,
-                            title: "Testing ActionSheet"
+                            title: "Ações"
                           },
                           buttonIndex => {
                             this.action(buttonIndex, driver)
@@ -124,6 +116,20 @@ class Driver extends Component {
                 { cancelable: false }
               )
           break;
+          case 2:
+          Alert.alert(
+            driver.enabled?`Desativar`:`Ativar` + ` ${driver.name}?` ,
+            driver.enabled?'Desativar o status removerá o motorista da fila, confirma essa ação?':'Confirma alteração do status?',
+            [
+              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+              {text: 'OK', onPress: () => {
+                this.props.toggleStatus(driver)
+              }},
+            ],
+            { cancelable: false }
+          )
+
+          break;
         }
 
 
@@ -137,7 +143,7 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { getDrivers, initDrivers, enqueueDrivers, removeDriver })( Driver )
+export default connect(mapStateToProps, { getDrivers, removeDriver, toggleStatus })( Driver )
 
 const styles = StyleSheet.create({
     boxNumber:{

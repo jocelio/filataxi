@@ -10,6 +10,8 @@ import CustomHeader from '../common/CustomHeader'
 import { onSignOut } from "../../auth/auth";
 import SortableListView from 'react-native-sortable-listview'
 
+import { enqueueDrivers, initDrivers } from "../../actions/driver"
+
 import { getData } from '../../actions';
 
 class Home extends Component {
@@ -34,8 +36,18 @@ class Home extends Component {
                     <Text>Home Screen :D</Text>
 
                     <Button onPress={() => onSignOut().then(() => this.props.navigation.navigate("SignedOut"))}
-                    full>
+                    full style={{marginBottom: 4}}>
                         <Text style={{ color: 'white' }}>Sair</Text>
+                    </Button>
+
+                    <Button onPress={() => onSignOut().then(() => this.props.initDrivers().then(() => Alert.alert("Feito")) )}
+                    full style={{marginBottom: 4}}>
+                        <Text style={{ color: 'white' }}>Init </Text>
+                    </Button>
+
+                    <Button onPress={() => onSignOut().then(() => this.props.enqueueDrivers().then(() => Alert.alert("Feito")))}
+                    full style={{marginBottom: 4}}>
+                        <Text style={{ color: 'white' }}>Enfileirar</Text>
                     </Button>
 
                 </Content>
@@ -76,7 +88,7 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { getData })(Home)
+export default connect(mapStateToProps, { getData, enqueueDrivers, initDrivers })(Home)
 
 
 const styles = StyleSheet.create({
