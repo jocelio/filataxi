@@ -1,5 +1,5 @@
 import React from 'react'
 const images = {
-    loginLogo:require('./img/coruja.png')
+    loginLogo:require('./img/taxi.png')
 }
 export default images

@@ -3,14 +3,14 @@
  */
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { View, ListView, ActivityIndicator, StyleSheet, Alert, TextInput, TouchableHighlight } from "react-native";
+import { View, ListView, ActivityIndicator, StyleSheet, Alert, TextInput, TouchableHighlight, Image } from "react-native";
 import { Text, Button, Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Fab, ActionSheet } from 'native-base'
 import _ from 'lodash'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MenuSettings from "../common/MenuSettings";
 import CustomHeader from '../common/CustomHeader'
 import { getDrivers, removeDriver, toggleStatus } from "../../actions/driver"
-
+import Images from '../../assets/images'
 
 
 class Driver extends Component {
@@ -45,10 +45,11 @@ class Driver extends Component {
           dataArray={this.props.driverList}
           renderRow={ driver =>
              <ListItem key={driver.id}>
-             <Thumbnail square size={80} source={{ uri: 'https://conteudo.startse.com.br/wp-content/uploads/2016/02/6208_2_L.jpg' }} />
+
+               <Image style={{width:60, height:60}} source={Images.loginLogo} />
                <Body>
                  <Text>{driver.name}</Text>
-                 <Text note> {driver.email} - {driver.enabled?'Ativo':'Inativo'} </Text>
+                 <Text note>{driver.email} - {driver.enabled?'Ativo':'Inativo'} </Text>
                </Body>
                <Right>
                   <TouchableHighlight underlayColor={'gray'}

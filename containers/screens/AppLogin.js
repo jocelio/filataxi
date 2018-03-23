@@ -51,9 +51,11 @@ const styles = StyleSheet.create({
         , height:180
     },
     text:{
-        color:'#fff'
+        color:'#000'
         , marginTop:10
         , fontSize:22
+        , fontWeight: 'bold'
+        , fontFamily: 'Zapfino'
     },
     logoContainer:{
          alignItems: 'center'
