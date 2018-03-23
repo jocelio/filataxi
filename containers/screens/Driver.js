@@ -4,17 +4,18 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { View, ListView, ActivityIndicator, StyleSheet, Alert, TextInput } from "react-native";
-import { Text, Button, Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Fab } from 'native-base'
+import { Text, Button, Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Fab, Picker, Item } from 'native-base'
+import _ from 'lodash'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MenuSettings from "../common/MenuSettings";
 import CustomHeader from '../common/CustomHeader'
-import { getDrivers } from "../../actions/driver"
+import { getDrivers, initDrivers, enqueueDrivers } from "../../actions/driver"
 
 
 
 class Driver extends Component {
 
-    static navigationOptions = MenuSettings({label:'Motoristas',iconName:'home'});
+    static navigationOptions = MenuSettings({label:'Motoristas',iconName:'group'});
 
     constructor(props) {
         super(props);
@@ -23,7 +24,17 @@ class Driver extends Component {
 
     componentDidMount() {
         this.setState({loading:true})
-        this.props.getDrivers().then(() => this.setState({loading:false}));
+        this.props.getDrivers().then(() => {
+          if(_.isEmpty(this.props.driverList)){
+              this.setState({loading:true})
+              this.props.initDrivers().then(() => {
+                return this.props.enqueueDrivers()
+              }).then( () =>
+              this.props.getDrivers().then(() => this.setState({loading:false}))
+            )
+          }
+          this.setState({loading:false})
+        });
     }
 
     render() {
@@ -48,7 +59,20 @@ class Driver extends Component {
                  <Text note> Usuário Ativo </Text>
                </Body>
                <Right>
-                 <Text note>3:43 pm</Text>
+
+                     <Picker
+                       textStyle={{color:'white', fontWeight:'bold', fontSize:12}}
+                       mode="dropdown"
+                       placeholder={<MaterialIcons name='settings' size={24} style={{color:'black'}}/>}
+                       iosHeader={r.name}
+                       mode="dropdown"
+                       selectedValue={this.state.value}
+                       onValueChange={value => this.onValueChange(value, r)}
+                     >
+                          <Item label="Excluir" value="Excluir" />
+                          <Item label="Editar" value="Editar" />
+                     </Picker>
+
                </Right>
               </ListItem>
           }/>
@@ -80,6 +104,24 @@ class Driver extends Component {
         );
     }
 
+    onValueChange(value, driver){
+        if(value === "Excluir"){
+          Alert.alert(
+            'Ação',
+            'Deseja realmente excuir?',
+            [
+              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+              {text: 'OK', onPress: () => {
+                this.props.removeDriver(driver.id)
+              }},
+            ],
+            { cancelable: false }
+          )
+          return;
+        }
+
+        this.props.navigation.navigate('DriverNew', { driver })
+    }
 }
 
 function mapStateToProps(state) {
@@ -89,7 +131,7 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { getDrivers })( Driver )
+export default connect(mapStateToProps, { getDrivers, initDrivers, enqueueDrivers })( Driver )
 
 const styles = StyleSheet.create({
     boxNumber:{

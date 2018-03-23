@@ -7,22 +7,24 @@ import { Button, Container, Content} from 'native-base'
 import { connect } from 'react-redux';
 import MenuSettings from '../containers/common/MenuSettings'
 import CustomHeader from '../containers/common/CustomHeader'
-import { saveDriver } from '../actions/driver'
+import { saveDriver, updateDriver } from '../actions/driver'
 import _ from 'lodash'
 
 class DriverNew extends Component {
 
     constructor(props){
         super(props)
-        this.state = { loading: false}
+        this.state = { loading: false, driver: {name:'', email:''}}
     }
 
-    componentDidMount(){
-      console.log(this.props.navigation.state.params)
-
+    componentWillMount(){
+      const {driver} = this.props.navigation.state.params
+      // if(driver)
+      this.setState({driver})
     }
 
     render() {
+
        return (<Container>
 
            <Content alwaysBounceVertical={false}>
@@ -36,7 +38,8 @@ class DriverNew extends Component {
                         onSubmitEditing={() => this.emailInput.focus()}
                         autoCapitalize='none'
                         autoCorrect={false}
-                        onChangeText={(name) => this.setState({name})}
+                        onChangeText={(name) => this.setState({ driver:{...this.state.driver, name: name}})}
+                        value={this.state.driver.name}
 
                     />
                     <TextInput
@@ -47,7 +50,8 @@ class DriverNew extends Component {
                         keyboardType='email-address'
                         autoCapitalize='none'
                         autoCorrect={false}
-                        onChangeText={(email) => this.setState({email})}
+                        onChangeText={(email) => this.setState({ driver:{...this.state.driver, email: email}})}
+                        value={this.state.driver.email}
 
                     />
                 </View>
@@ -72,16 +76,22 @@ class DriverNew extends Component {
     }
 
     save(){
-        const {name, email } = this.state
+        const { driver } = this.state
 
-        if(_.isNil(name) || _.isNil(email)){
+        if(_.isNil(driver.name) || _.isNil(driver.email)){
           Alert.alert('Nome e email são obrigatórios')
           return;
         }
 
-        this.props.saveDriver({name, email}).then(()=> {
-          this.props.navigation.navigate('Driver')
-        })
+        if(driver.id){
+          this.props.updateDriver(driver).then(() => this.back())
+          return;
+        }
+        this.props.saveDriver(driver).then(()=> this.back())
+    }
+
+    back(){
+      this.props.navigation.navigate('Driver')
     }
 
 
@@ -92,7 +102,7 @@ function mapStateToProps(state, props) {
     }
 }
 
-export default connect(mapStateToProps, { saveDriver })(DriverNew)
+export default connect(mapStateToProps, { saveDriver, updateDriver })(DriverNew)
 
 const styles = StyleSheet.create({
     button:{
