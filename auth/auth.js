@@ -8,12 +8,14 @@ export const onSignOut = () => AsyncStorage.multiRemove(["userdata","access_toke
 export const isSignedIn = () => {
     return new Promise((resolve, reject) => {
         AsyncStorage.getItem("access_token")
-            .then(res => {
-                if (res !== null) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
+            .then(token => {
+              AsyncStorage.getItem("userdata").then(user => {
+                  if (token !== null && user !== null) {
+                      resolve(true);
+                  } else {
+                      resolve(false);
+                  }
+              })
             })
             .catch(err => reject(err));
     });

@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { Alert, View } from 'react-native';
 import { Root } from 'native-base'
 import {createRootNavigator} from "./Routes";
-import {isSignedIn} from './auth/auth'
+import { isSignedIn } from './auth/auth'
 import store from './store';
 
 export default class App extends Component{
@@ -19,7 +19,10 @@ export default class App extends Component{
 
     componentWillMount() {
         isSignedIn()
-            .then(res => this.setState({ signedIn: res, checkedSignIn: true }))
+            .then(res => {
+              console.log(res)
+              this.setState({ signedIn: res, checkedSignIn: true })
+            })
             .catch(err => Alert.alert("An error occurred"));
     }
 

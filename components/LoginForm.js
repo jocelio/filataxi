@@ -19,14 +19,13 @@ class LoginForm extends Component {
             <View>
                 <TextInput
                     style={styles.input}
-                    placeholder='Usuário ou E-mail'
+                    placeholder='E-mail'
                     returnKeyType='next'
                     onSubmitEditing={() => this.passwordInput.focus()}
                     keyboardType='email-address'
                     autoCapitalize='none'
                     autoCorrect={false}
                     onChangeText={(user) => this.setState({user})}
-
                 />
                 <TextInput
                     style={styles.input}

@@ -19,41 +19,9 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {loading:false};
-
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.state = {
-            ds: ds
-        };
-    }
-
-    componentDidMount() {
-        this.props.getData();
     }
 
     render() {
-
-        const order = Object.keys(this.props.data)
-        const comp = (this.props.loading) ?
-            <View style={styles.activityIndicatorContainer}>
-                <ActivityIndicator
-                    animating={true}
-                    style={[{height: 80, width:80}]}
-                    size="large"
-                />
-            </View>
-            :
-            <View style={{flex:1, backgroundColor: '#F5F5F5', paddingTop:20}}>
-                <SortableListView
-                  style={{ flex: 1 }}
-                  data={this.props.data}
-                  order={order}
-                  onRowMoved={e => {
-                    order.splice(e.to, 0, order.splice(e.from, 1)[0])
-                    this.forceUpdate()
-                  }}
-                  renderRow={(row, some) => this.renderRow(row, some)}
-                />
-            </View>
 
         return (
             <Container>
@@ -69,8 +37,6 @@ class Home extends Component {
                     full>
                         <Text style={{ color: 'white' }}>Sair</Text>
                     </Button>
-
-                    {comp}
 
                 </Content>
 

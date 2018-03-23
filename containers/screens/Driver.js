@@ -52,7 +52,7 @@ class Driver extends Component {
           :<List
           dataArray={this.props.driverList}
           renderRow={ driver =>
-             <ListItem>
+             <ListItem key={driver.id}>
              <Thumbnail square size={80} source={{ uri: 'https://conteudo.startse.com.br/wp-content/uploads/2016/02/6208_2_L.jpg' }} />
                <Body>
                  <Text>{driver.name}</Text>

@@ -17,10 +17,6 @@ const SignedIn = DrawerNavigator(
             path:'/home',
             screen: Home,
         },
-        First:{
-            path:'/first',
-            screen: FirstScreen,
-        },
         Fila:{
             path:'/fila',
             screen: Fila,
@@ -34,7 +30,7 @@ const SignedIn = DrawerNavigator(
         }
     },
     {
-        initialRouteName:'Driver',
+        initialRouteName:'Fila',
         drawerPosition:'left',
         drawerWidth: 300,
         contentOptions:{
@@ -43,7 +39,8 @@ const SignedIn = DrawerNavigator(
         contentComponent: CustomDrawerContent,
         drawerOpenRoute: 'DrawerOpen',
         drawerCloseRoute: 'DrawerClose',
-        drawerToggleRoute: 'DrawerToggle'
+        drawerToggleRoute: 'DrawerToggle',
+
     }
 );
 
@@ -67,7 +64,7 @@ export const createRootNavigator = (signedIn = false) => {
         {
             headerMode: "none",
             mode: "modal",
-            initialRouteName: !signedIn ? "SignedIn" : "SignedOut"
+            initialRouteName: signedIn ? "SignedIn" : "SignedOut"
         }
     );
 };
