@@ -30,7 +30,7 @@ export const getDrivers = () => ({
 
 export const saveDriver = driver => ({
       type: SAVE_DRIVER,
-      payload: axios.post(`/driver`, driver)
+      payload: axios.post(`/driver`, {...driver, enabled: true})
 })
 
 export const updateDriver = driver => ({
