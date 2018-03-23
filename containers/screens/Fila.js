@@ -7,6 +7,7 @@ import {Text, View, ListView, ActivityIndicator, StyleSheet, TouchableHighlight,
 import {Button, Container, Content, List, ListItem, Card, Form, Picker, Item} from 'native-base'
 import MenuSettings from "../common/MenuSettings"
 import CustomHeader from '../common/CustomHeader'
+import _ from 'lodash'
 import { getFila, move, changeStatus, moveHead } from "../../actions/fila"
 import SortableListView from 'react-native-sortable-listview'
 
@@ -18,16 +19,14 @@ class Fila extends Component {
     constructor(props) {
         super(props);
         this.state = {loading:false};
-
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.state = {
-            ds: ds
-        };
     }
 
     componentDidMount() {
         this.setState( prev => ({loading: !prev.loading}))
         this.props.getFila().then(r => {
+            if(_.isEmpty(this.props.filaList)){
+              Alert.alert('Fila não organizada','Enfileirar motoristas para iniciar trabalho.')
+            }
             this.setState( prev => ({loading: !prev.loading}));
         });
     }
@@ -117,7 +116,6 @@ class Fila extends Component {
                         {rowData.index === 1 && rowData.status === 'RODANDO'? this.renderStatusSuper() : this.renderStatusItems()}
                       </Picker>
                   </Button>
-
             </View>
          </Card>
       </TouchableHighlight>

@@ -19,7 +19,7 @@ class DriverNew extends Component {
 
     componentWillMount(){
       const {driver} = this.props.navigation.state.params
-      // if(driver)
+      if(driver)
       this.setState({driver})
     }
 

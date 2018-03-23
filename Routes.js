@@ -29,7 +29,7 @@ const SignedIn = DrawerNavigator(
             path:'/driver',
             screen: StackNavigator({
                     Driver: { screen: Driver, navigationOptions: { header:false }},
-                    DriverNew: { screen: DriverNew, navigationOptions: { title:'Novo Motorista' } }
+                    DriverNew: { screen: DriverNew, navigationOptions: { title:'Motorista' } }
                   }),
         }
     },

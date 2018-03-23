@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Provider } from 'react-redux';
 import { Alert, View } from 'react-native';
+import { Root } from 'native-base'
 import {createRootNavigator} from "./Routes";
 import {isSignedIn} from './auth/auth'
 import store from './store';
@@ -29,7 +30,7 @@ export default class App extends Component{
 
         const Layout = createRootNavigator(signedIn);
         return (<Provider store={store}>
-                    <Layout />
+                  <Root><Layout/></Root>
                 </Provider>);
     }
 }

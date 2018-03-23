@@ -8,6 +8,7 @@ export const SAVE_DRIVER = 'SAVE_DRIVER'
 export const INIT_DRIVER = 'INIT_DRIVER'
 export const UPDATE_DRIVER = 'UPDATE_DRIVER'
 export const ENQUEUE_DRIVER = 'ENQUEUE_DRIVER'
+export const REMOVE_DRIVER = 'REMOVE_DRIVER'
 
 
 const axios = axiosInstance();
@@ -31,7 +32,14 @@ export const saveDriver = driver => ({
       type: SAVE_DRIVER,
       payload: axios.post(`/driver`, driver)
 })
+
 export const updateDriver = driver => ({
       type: UPDATE_DRIVER,
       payload: axios.put(`/driver/${driver.id}`, driver)
+})
+
+export const removeDriver = driver => ({
+      type: REMOVE_DRIVER,
+      payload: axios.delete(`/driver/${driver.id}`),
+      driver_id: driver.id
 })
