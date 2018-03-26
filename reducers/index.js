@@ -7,6 +7,7 @@ import { combineReducers } from 'redux';
 import LoginReducer from './login'
 import FilaReducer from './fila'
 import DriverReducer from './driver'
+import HistoryReducer from './history'
 
 import { DATA_AVAILABLE } from "../actions/"
 
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
     dataReducer: dataReducer,
     loginReducer: LoginReducer,
     filaReducer: FilaReducer,
-    driverReducer: DriverReducer
+    driverReducer: DriverReducer,
+    historyReducer :HistoryReducer
 })
 
 export default rootReducer;
