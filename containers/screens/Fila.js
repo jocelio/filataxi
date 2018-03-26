@@ -4,7 +4,7 @@
 import React, {Component} from "react";
 import { connect } from 'react-redux';
 import {Text, View, ListView, ActivityIndicator, StyleSheet, TouchableHighlight, Alert} from "react-native";
-import {Button, Container, Content, List, ListItem, Card, Form, Picker, Item} from 'native-base'
+import {Button, Container, Content, List, ListItem, Card, Form, Picker, Item, ActionSheet} from 'native-base'
 import MenuSettings from "../common/MenuSettings"
 import CustomHeader from '../common/CustomHeader'
 import _ from 'lodash'
@@ -87,34 +87,34 @@ class Fila extends Component {
         );
     }
 
-    renderRow(rowData){
+    renderRow(position){
       return (
-        <TouchableHighlight underlayColor={'green'} style={{backgroundColor: "#F8F8F8"}} key={rowData.id}>
+        <TouchableHighlight underlayColor={'green'} style={{backgroundColor: "#F8F8F8"}} key={position.id}>
           <Card style={styles.row}>
             <View style={styles.boxNumber} >
                <Text style={styles.titleNumber}>
-                   {rowData.index}
+                   {position.index}
                </Text>
             </View>
             <View style={styles.boxText} >
                 <Text style={styles.title}>
-                     {rowData.driver.name}
+                     {position.driver.name}
                  </Text>
             </View>
 
             <View style={styles.boxOpt} >
-                  <Button style={{width:'100%', justifyContent: 'center'}}>
-                      <Picker
-                        textStyle={{color:'white', fontWeight:'bold', fontSize:12}}
-                        mode="dropdown"
-                        placeholder={rowData.status}
-                        iosHeader="Status"
-                        mode="dropdown"
-                        selectedValue={rowData.status}
-                        onValueChange={value => this.onValueChange(value, rowData)}
-                      >
-                        {rowData.index === 1 && rowData.status === 'RODANDO'? this.renderStatusSuper() : this.renderStatusItems()}
-                      </Picker>
+                  <Button style={{width:'100%', justifyContent: 'center'}}
+                  onPress={() => ActionSheet.show(
+                      {
+                        options: position.index === 1? this.renderStatusSuper(position) : this.renderStatusItems(position),
+                        cancelButtonIndex: 3,
+                        title: "Ações"
+                      },
+                      buttonIndex => {
+                        this.onValueChange(buttonIndex, position)
+                      }
+                    )}>
+                      <Text>{position.status}</Text>
                   </Button>
             </View>
          </Card>
@@ -122,27 +122,25 @@ class Fila extends Component {
       )
     }
 
-    renderStatusSuper(){
-        return [ <Item label="RODANDO" value="RODANDO" key={1}/>
-                , <Item label="CHEGOU" value="CHEGOU" key={2}/>]
+    renderStatusSuper(position){
+        return [ position.status === 'AGUARDANDO' ? 'RODANDO': 'CHEGOU', 'Cancelar' ]
     }
 
-    renderStatusItems(){
-        return [ <Item label="AGUARDANDO" value="AGUARDANDO" key={1} />
-                , <Item label="RODANDO" value="RODANDO" key={2} /> ]
+    renderStatusItems(position){
+        return [ position.status === 'AGUARDANDO' ? 'RODANDO': 'AGUARDANDO', 'Cancelar' ]
     }
 
-    onValueChange(value, rowData){
-        if(value === "CHEGOU"){
-          this.props.changeStatus(rowData.id).then(() =>  {
+    onValueChange(value, position){
+      console.log('value',value)
+        if(value == 1) return;
+
+        this.props.changeStatus(position.id).then(() => {
+           if(position.index === 1 && position.status == "RODANDO")
             this.props.moveHead()
-          })
-          return;
-        }
-
-        this.props.changeStatus(rowData.id).then(() => {
-          this.props.getFila()
+           else
+            this.props.getFila()
         })
+
     }
 
 }
