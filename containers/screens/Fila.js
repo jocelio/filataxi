@@ -131,15 +131,12 @@ class Fila extends Component {
     }
 
     onValueChange(value, position){
-      console.log('value',value)
+      
         if(value == 1) return;
 
-        this.props.changeStatus(position.id).then(() => {
-           if(position.index === 1 && position.status == "RODANDO")
-            this.props.moveHead()
-           else
-            this.props.getFila()
-        })
+        this.props.changeStatus(position.id).then(() =>
+           (position.index === 1 && position.status == "RODANDO")? this.props.moveHead(): this.props.getFila()
+        )
 
     }
 
