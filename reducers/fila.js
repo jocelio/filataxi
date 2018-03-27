@@ -1,4 +1,4 @@
-import { GET_FILA, MOVE, CHANGE_STATUS, MOVE_HEAD } from "../actions/fila";
+import { GET_FILA, MOVE, CHANGE_STATUS, MOVE_HEAD, NEXT_QUEUE } from "../actions/fila";
 
 
 export default (state = [], action) => {
@@ -13,7 +13,8 @@ export default (state = [], action) => {
             return {...state, positionChanged: action.payload.data}
         case MOVE_HEAD:
             return {...state, filaList: action.payload.data}
-
+        case NEXT_QUEUE:
+            return {...state, nextQueue: action.payload.data}
 
 
         default:

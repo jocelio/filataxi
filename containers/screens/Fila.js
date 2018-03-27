@@ -3,7 +3,7 @@
  */
 import React, {Component} from "react";
 import { connect } from 'react-redux';
-import {Text, View, ActivityIndicator, StyleSheet, TouchableHighlight, Alert} from "react-native";
+import {Text, View, ActivityIndicator, StyleSheet, TouchableHighlight, Alert, AsyncStorage} from "react-native";
 import {Button, Container, Content, Card, ActionSheet, Fab} from 'native-base'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MenuSettings from "../common/MenuSettings"
@@ -94,10 +94,18 @@ class Fila extends Component {
                   onPress={() => this.setState({ active: !this.state.active })}>
 
                   <MaterialIcons name="build" size={30} />
-                  <Button style={{ backgroundColor: '#7f8c8d' }}
-                  onPress={() => this.addDriver() }>
-                    <MaterialIcons name='add' size={24} />
-                  </Button>
+                  {!_(this.props.filaList).filter(p => p.driver.email == this.props.appDriver.email).isEmpty() &&
+                    <Button style={{backgroundColor: '#ff7979'}}
+                            onPress={() => this.exitQueue()}>
+                        <MaterialIcons name='exit-to-app' size={24}/>
+                    </Button>
+                  }
+                  {!_(this.props.driverList).filter(d => !d.enabled).isEmpty() &&
+                      <Button style={{ backgroundColor: '#7f8c8d' }}
+                        onPress={() => this.addDriver() }>
+                        <MaterialIcons name='add' size={24} />
+                      </Button>
+                  }
                   <Button style={{ backgroundColor: '#2ecc71' }}
                           onPress={() => this.nextQueue()}>
                     <MaterialIcons name='list' size={24} />
@@ -107,6 +115,21 @@ class Fila extends Component {
 
             </Container>
         );
+    }
+
+    exitQueue(){
+        Alert.alert(
+            'Sair da Fila',
+            'Deseja realmente sair da fila?',
+            [
+                {text: 'Cancel', style: 'cancel'},
+                {text: 'OK', onPress: () =>
+                     this.props.toggleStatus(this.props.appDriver).then(() => this.props.getFila())
+                },
+            ],
+            { cancelable: false }
+        )
+
     }
 
     addDriver(){
@@ -137,8 +160,6 @@ class Fila extends Component {
             ],
             { cancelable: false }
         )
-
-
     }
 
     renderRow(position){
@@ -197,7 +218,8 @@ class Fila extends Component {
 function mapStateToProps(state) {
     return {
         filaList: state.filaReducer.filaList || [],
-        driverList: state.driverReducer.driverList
+        driverList: state.driverReducer.driverList,
+        appDriver:  state.loginReducer.appDriver
     }
 }
 

@@ -4,6 +4,7 @@
 import { axiosInstance } from "../factory/AxiosFactory";
 export const DO_LOGIN = 'DO_LOGIN'
 export const USER_INFO ='USER_INFO';
+export const LOGGED_DRIVER= 'LOGGED_DRIVER'
 
 const axios = axiosInstance();
 
@@ -28,3 +29,9 @@ export const login = ({username, password}) => {
                Authorization: 'Bearer ' + token
              }
         })})
+
+export const loggedDriver = email => (
+    {type: LOGGED_DRIVER,
+    payload: axios.get(`/driver/${email}`)}
+)
+
