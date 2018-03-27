@@ -2,9 +2,11 @@
  * Created by jocelio on 05/03/18.
  */
 import { axiosInstance } from "../factory/AxiosFactory";
+import _ from 'lodash'
 export const DO_LOGIN = 'DO_LOGIN'
 export const USER_INFO ='USER_INFO';
 export const LOGGED_DRIVER= 'LOGGED_DRIVER'
+export const USER_ADMIN='USER_ADMIN'
 
 const axios = axiosInstance();
 
@@ -35,3 +37,15 @@ export const loggedDriver = email => (
     payload: axios.get(`/driver/${email}`)}
 )
 
+export const isAdmin = token => {
+  const tokenData = parseJwt(token)
+  const roles = tokenData['https://filataxi.com/user_metadata'].roles
+  const isAdmin = !_(roles).filter(f => f == "admin").isEmpty()
+  return {type: USER_ADMIN, payload: isAdmin}
+}
+
+const parseJwt = token => {
+   var base64Url = token.split('.')[1];
+   var base64 = base64Url.replace('-', '+').replace('_', '/');
+   return JSON.parse(atob(base64));
+}

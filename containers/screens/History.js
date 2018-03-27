@@ -4,11 +4,11 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Text, View, ListView, ActivityIndicator, StyleSheet, Alert, TouchableHighlight } from "react-native";
-import { Button, Container, Content } from 'native-base'
+import { Button, Container, Content,  List, ListItem, Body } from 'native-base'
 import MenuSettings from "../common/MenuSettings";
 import CustomHeader from '../common/CustomHeader'
 
-import { getHistory } from '../../history';
+import { getHistory } from '../../actions/history';
 
 class History extends Component {
 
@@ -19,32 +19,46 @@ class History extends Component {
         this.state = {loading:false};
     }
 
-    render() {
+    componentDidMount() {
+        this.setState({loading:true})
+        this.props.getHistory().then(() => {
+            this.setState({loading:false})
+        });
+    }
+
+    render(){
+
+    const comp = (this.state.loading) ?
+        <View style={styles.activityIndicatorContainer}>
+            <ActivityIndicator
+                animating={true}
+                style={[{height: 80, width:80}]}
+                size="large"
+            />
+        </View>
+        :<List
+        dataArray={this.props.historyList}
+        renderRow={ history =>
+           <ListItem key={history.id}>
+             <Body>
+               <Text>{history.description}</Text>
+             </Body>
+            </ListItem>
+        }/>
 
         return (
             <Container>
 
                 <CustomHeader title={History.navigationOptions.tapBarLabel} drawerOpen={() => this.props.navigation.navigate('DrawerOpen')} />
 
-                <Content contentContainerStyle={{ flex: 2, alignItems: 'center', justifyContent: 'center', padding: 10}}
+                <Content contentContainerStyle={{ flex: 2, alignItems: 'center', padding: 10}}
                 alwaysBounceVertical={false}>
 
-                    <Text>Home Screen :D</Text>
+                    <Text>Historico</Text>
 
-                    <Button onPress={() => onSignOut().then(() => this.props.navigation.navigate("SignedOut"))}
-                    full style={{marginBottom: 4}}>
-                        <Text style={{ color: 'white' }}>Sair</Text>
-                    </Button>
-
-                    <Button onPress={() => onSignOut().then(() => this.props.initDrivers().then(() => Alert.alert("Feito")) )}
-                    full style={{marginBottom: 4}}>
-                        <Text style={{ color: 'white' }}>Init </Text>
-                    </Button>
-
-                    <Button onPress={() => onSignOut().then(() => this.props.enqueueDrivers().then(() => Alert.alert("Feito")))}
-                    full style={{marginBottom: 4}}>
-                        <Text style={{ color: 'white' }}>Enfileirar</Text>
-                    </Button>
+                    <View style={{width:'100%'}}>
+                      {comp}
+                    </View>
 
                 </Content>
 

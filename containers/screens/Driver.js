@@ -52,6 +52,7 @@ class Driver extends Component {
                  <Text note>{driver.email} - {driver.enabled?'Ativo':'Inativo'} </Text>
                </Body>
                <Right>
+                  {this.props.isUserAdmin &&
                   <TouchableHighlight underlayColor={'gray'}
                       onPress={() => ActionSheet.show(
                           {
@@ -65,7 +66,7 @@ class Driver extends Component {
                         )}>
                     <MaterialIcons name='settings' size={24} style={{color:'black'}}/>
                   </TouchableHighlight>
-
+                  }
                </Right>
               </ListItem>
           }/>
@@ -84,15 +85,17 @@ class Driver extends Component {
                   </View>
 
                 </Content>
-                <Fab
-                active={this.state.active}
-                direction="up"
-                containerStyle={{ }}
-                style={{ backgroundColor: '#5067FF' }}
-                position="bottomRight"
-                onPress={() => navigate('DriverNew', { name: 'Jane' }) }>
-                 <MaterialIcons name='add' size={24} />
-                </Fab>
+                {this.props.isUserAdmin &&
+                  <Fab
+                  active={this.state.active}
+                  direction="up"
+                  containerStyle={{ }}
+                  style={{ backgroundColor: '#5067FF' }}
+                  position="bottomRight"
+                  onPress={() => navigate('DriverNew', { name: 'Jane' }) }>
+                   <MaterialIcons name='add' size={24} />
+                  </Fab>
+               }
             </Container>
         );
     }
@@ -138,7 +141,8 @@ class Driver extends Component {
 function mapStateToProps(state) {
     return {
         loading: state.dataReducer.loading,
-        driverList: state.driverReducer.driverList
+        driverList: state.driverReducer.driverList,
+        isUserAdmin: state.loginReducer.isUserAdmin
     }
 }
 

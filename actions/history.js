@@ -9,5 +9,5 @@ const axios = axiosInstance();
 
  export const getHistory = token => (
         {type: GET_HISTORY,
-        payload: axios.get('https://jocelio.auth0.com/history')}
+        payload: axios.get('/history')}
   )

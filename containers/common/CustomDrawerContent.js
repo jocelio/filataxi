@@ -12,9 +12,7 @@ class CustomDrawerContent extends Component {
     }
 
    componentDidMount(){
-     AsyncStorage.getItem("userInfo").then(user => {
-         this.setState({userInfo: user, loading: false})
-     })
+         this.setState({userInfo: this.props.userInfoData, loading: false})
    }
 
     render(){
@@ -37,7 +35,7 @@ class CustomDrawerContent extends Component {
                       <Image
                           style={styles.drawerImage}
                           source={{uri: userInfo.picture }}/>
-                      <Text style={{fontWeight: 'bold', fontSize: 20}}>{userInfo.nickname}</Text>
+                      <Text style={{fontWeight: 'bold', fontSize: 20}}>{userInfo.nickname} {this.props.isUserAdmin && "*"}</Text>
                       <Text style={{fontSize: 20}}>{userInfo.name}</Text>
                     </Body>
                 </Header>
@@ -51,7 +49,8 @@ class CustomDrawerContent extends Component {
 
 function mapStateToProps(state) {
     return {
-        userInfo: state.loginReducer.userInfo
+        userInfoData: state.loginReducer.userInfo,
+        isUserAdmin: state.loginReducer.isUserAdmin
     }
 }
 

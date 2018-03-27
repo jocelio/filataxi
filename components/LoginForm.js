@@ -3,8 +3,9 @@
  */
 import React, {Component} from 'react'
 import {StyleSheet, View, TextInput, Text, Alert, AsyncStorage, ActivityIndicator} from 'react-native'
+import _ from 'lodash'
 import { Button } from 'native-base'
-import { login, userInfo, loggedDriver } from "../actions/login";
+import { login, userInfo, loggedDriver, isAdmin } from "../actions/login";
 import { connect } from "react-redux";
 
 class LoginForm extends Component {
@@ -59,10 +60,11 @@ class LoginForm extends Component {
             if (!this.props.loginData || !this.props.loginData.access_token) {
                 Alert.alert("Usuário ou senha incorretos.")
                 throw "Usuário ou senha incorretos."
-                return;
             }
 
-            return AsyncStorage.setItem("access_token",this.props.loginData.access_token)
+            return this.props.isAdmin(this.props.loginData.id_token)
+        }).then(() => {
+            return AsyncStorage.multiSet([["access_token",this.props.loginData.access_token],["admin", this.props.isUserAdmin? "true":"false"]])
         }).then(() => {
             return this.props.userInfo()
         }).then(() => {
@@ -70,7 +72,7 @@ class LoginForm extends Component {
         }).then(() => {
             return this.props.loggedDriver(this.props.userInfoData.name.replace(".com",""))
         }).then(() => {
-            return AsyncStorage.setItem("driver", JSON.stringify(this.props.appDriver))
+            return AsyncStorage.setItem("driver", JSON.stringify(this.props.appDriver || ''))
         }).then(() => {
             this.setState({loading: false})
             return this.props.navigation.navigate("SignedIn")
@@ -88,12 +90,13 @@ function mapStateToProps(state, props) {
         loading: state.dataReducer.loading,
         userInfoData: state.loginReducer.userInfo,
         loginData: state.loginReducer.loginData,
-        appDriver:  state.loginReducer.appDriver
+        appDriver:  state.loginReducer.appDriver,
+        isUserAdmin: state.loginReducer.isUserAdmin
     }
 }
 
 
-export default connect(mapStateToProps, { login, userInfo, loggedDriver })(LoginForm)
+export default connect(mapStateToProps, { login, userInfo, loggedDriver, isAdmin })(LoginForm)
 
 
 const styles = StyleSheet.create({

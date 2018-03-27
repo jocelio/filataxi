@@ -29,8 +29,6 @@ class Fila extends Component {
         this.props.getFila()
             .then(() => _.isNil(this.props.driverList) && this.props.getDrivers())
             .then(() => this.setState( prev => ({loading: !prev.loading})))
-
-
     }
 
     render() {
@@ -50,6 +48,7 @@ class Fila extends Component {
                  limitScrolling={true}
                   style={{ flex: 1 }}
                   data={this.props.filaList}
+                  disableSorting={!this.props.isUserAdmin}
                   order={order}
                   onRowMoved={e => {
 
@@ -100,16 +99,20 @@ class Fila extends Component {
                         <MaterialIcons name='exit-to-app' size={24}/>
                     </Button>
                   }
-                  {!_(this.props.driverList).filter(d => !d.enabled).isEmpty() &&
-                      <Button style={{ backgroundColor: '#7f8c8d' }}
-                        onPress={() => this.addDriver() }>
-                        <MaterialIcons name='add' size={24} />
-                      </Button>
+
+                  {this.props.isUserAdmin &&
+                  <Button style={{ backgroundColor: '#7f8c8d' }}
+                    onPress={() => this.addDriver()} disabled={_(this.props.driverList).filter(d => !d.enabled).isEmpty()}>
+                    <MaterialIcons name='add' size={24} />
+                  </Button>
                   }
+
+                  {this.props.isUserAdmin &&
                   <Button style={{ backgroundColor: '#2ecc71' }}
                           onPress={() => this.nextQueue()}>
                     <MaterialIcons name='list' size={24} />
                   </Button>
+                  }
 
                 </Fab>
 
@@ -178,6 +181,7 @@ class Fila extends Component {
             </View>
 
             <View style={styles.boxOpt} >
+                  {this.props.isUserAdmin &&
                   <Button style={{width:'100%', justifyContent: 'center'}}
                   onPress={() => ActionSheet.show({
                         options: position.index === 1? this.renderStatusSuper(position) : this.renderStatusItems(position),
@@ -189,6 +193,7 @@ class Fila extends Component {
                     )}>
                       <Text>{position.status}</Text>
                   </Button>
+                }
             </View>
          </Card>
       </TouchableHighlight>
@@ -219,7 +224,8 @@ function mapStateToProps(state) {
     return {
         filaList: state.filaReducer.filaList || [],
         driverList: state.driverReducer.driverList,
-        appDriver:  state.loginReducer.appDriver
+        appDriver:  state.loginReducer.appDriver,
+        isUserAdmin: state.loginReducer.isUserAdmin
     }
 }
 
