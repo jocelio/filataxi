@@ -3,8 +3,8 @@
  */
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { View, ListView, ActivityIndicator, StyleSheet, Alert, TextInput, TouchableHighlight, Image } from "react-native";
-import { Text, Button, Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Fab, ActionSheet } from 'native-base'
+import { View, ActivityIndicator, StyleSheet, Alert, TouchableHighlight, Image, RefreshControl } from "react-native";
+import { Text, Container, Content, List, ListItem, Body, Right, Fab, ActionSheet } from 'native-base'
 import _ from 'lodash'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MenuSettings from "../common/MenuSettings";
