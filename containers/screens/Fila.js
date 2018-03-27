@@ -3,18 +3,21 @@
  */
 import React, {Component} from "react";
 import { connect } from 'react-redux';
-import {Text, View, ListView, ActivityIndicator, StyleSheet, TouchableHighlight, Alert} from "react-native";
-import {Button, Container, Content, List, ListItem, Card, Form, Picker, Item, ActionSheet} from 'native-base'
+import {Text, View, ActivityIndicator, StyleSheet, TouchableHighlight, Alert} from "react-native";
+import {Button, Container, Content, Card, ActionSheet, Fab} from 'native-base'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MenuSettings from "../common/MenuSettings"
 import CustomHeader from '../common/CustomHeader'
 import _ from 'lodash'
-import { getFila, move, changeStatus, moveHead } from "../../actions/fila"
+import moment from 'moment'
+import { getFila, move, changeStatus, moveHead, nextQueue } from "../../actions/fila"
+import { getDrivers, toggleStatus } from "../../actions/driver"
 import SortableListView from 'react-native-sortable-listview'
 
 
 class Fila extends Component {
 
-    static navigationOptions = MenuSettings({label:'Fila',iconName:'toc'});
+    static navigationOptions = MenuSettings({label:'Fila',iconName:'list'});
 
     constructor(props) {
         super(props);
@@ -23,12 +26,11 @@ class Fila extends Component {
 
     componentDidMount() {
         this.setState( prev => ({loading: !prev.loading}))
-        this.props.getFila().then(r => {
-            if(_.isEmpty(this.props.filaList)){
-              Alert.alert('Fila não organizada','Enfileirar motoristas para iniciar trabalho.')
-            }
-            this.setState( prev => ({loading: !prev.loading}));
-        });
+        this.props.getFila()
+            .then(() => _.isNil(this.props.driverList) && this.props.getDrivers())
+            .then(() => this.setState( prev => ({loading: !prev.loading})))
+
+
     }
 
     render() {
@@ -79,12 +81,64 @@ class Fila extends Component {
 
                 <Content alwaysBounceVertical={false}>
 
-                    {comp}
+                  {_.isEmpty(this.props.filaList) && !this.state.loading ? <Text>Fila não criada</Text>: comp }
 
                 </Content>
 
+                <Fab
+                  active={this.state.active}
+                  direction="up"
+                  containerStyle={{ }}
+                  style={{ backgroundColor: '#5067FF' }}
+                  position="bottomRight"
+                  onPress={() => this.setState({ active: !this.state.active })}>
+
+                  <MaterialIcons name="build" size={30} />
+                  <Button style={{ backgroundColor: '#7f8c8d' }}
+                  onPress={() => this.addDriver() }>
+                    <MaterialIcons name='add' size={24} />
+                  </Button>
+                  <Button style={{ backgroundColor: '#2ecc71' }}
+                          onPress={() => this.nextQueue()}>
+                    <MaterialIcons name='list' size={24} />
+                  </Button>
+
+                </Fab>
+
             </Container>
         );
+    }
+
+    addDriver(){
+       const driverNames = this.props.driverList.filter(d => !d.enabled).map(d => d.name);
+       return ActionSheet.show({
+                options: [...driverNames, 'Cancelar'],
+                cancelButtonIndex: _.size(driverNames),
+            },
+            buttonIndex => {
+                const driver = _(this.props.driverList).filter(f => f.name == driverNames[buttonIndex]).first()
+                this.props.toggleStatus(driver).then(() => this.props.getFila())
+            }
+        )
+    }
+
+    nextQueue(){
+      const days = 1
+        Alert.alert(
+            'Fila do dia seguinte',
+            'Deseja criar a fila do dia seguinte com os motoristas que estão AGUARDANDO?',
+            [
+                {text: 'Cancel', style: 'cancel'},
+                {text: 'OK', onPress: () =>
+                        this.props.nextQueue(days).then(() =>
+                            Alert.alert("Fila do dia seguinte",`Fila do dia ${moment().add(days, 'days').format('DD/MM')} criada.`)
+                        ).catch(r => console.log(r))
+                },
+            ],
+            { cancelable: false }
+        )
+
+
     }
 
     renderRow(position){
@@ -104,11 +158,9 @@ class Fila extends Component {
 
             <View style={styles.boxOpt} >
                   <Button style={{width:'100%', justifyContent: 'center'}}
-                  onPress={() => ActionSheet.show(
-                      {
+                  onPress={() => ActionSheet.show({
                         options: position.index === 1? this.renderStatusSuper(position) : this.renderStatusItems(position),
-                        cancelButtonIndex: 3,
-                        title: "Ações"
+                        cancelButtonIndex: 1,
                       },
                       buttonIndex => {
                         this.onValueChange(buttonIndex, position)
@@ -131,7 +183,7 @@ class Fila extends Component {
     }
 
     onValueChange(value, position){
-      
+
         if(value == 1) return;
 
         this.props.changeStatus(position.id).then(() =>
@@ -144,11 +196,12 @@ class Fila extends Component {
 
 function mapStateToProps(state) {
     return {
-        filaList: state.filaReducer.filaList || []
+        filaList: state.filaReducer.filaList || [],
+        driverList: state.driverReducer.driverList
     }
 }
 
-export default connect(mapStateToProps, { getFila, move, changeStatus, moveHead })(Fila)
+export default connect(mapStateToProps, { getFila, move, changeStatus, moveHead, nextQueue, getDrivers, toggleStatus })(Fila)
 
 
 const styles = StyleSheet.create({
