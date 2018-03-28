@@ -11,7 +11,7 @@ import CustomHeader from '../common/CustomHeader'
 import _ from 'lodash'
 import moment from 'moment'
 import { getFila, move, changeStatus, moveHead, nextQueue } from "../../actions/fila"
-import { getDrivers, toggleStatus } from "../../actions/driver"
+import { getDrivers, toggleStatus, exitQueue } from "../../actions/driver"
 import SortableListView from 'react-native-sortable-listview'
 
 
@@ -127,7 +127,7 @@ class Fila extends Component {
             [
                 {text: 'Cancel', style: 'cancel'},
                 {text: 'OK', onPress: () =>
-                     this.props.toggleStatus(this.props.appDriver).then(() => this.props.getFila())
+                     this.props.exitQueue(this.props.appDriver).then(() => this.props.getFila())
                 },
             ],
             { cancelable: false }
@@ -229,7 +229,7 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { getFila, move, changeStatus, moveHead, nextQueue, getDrivers, toggleStatus })(Fila)
+export default connect(mapStateToProps, { getFila, move, changeStatus, moveHead, nextQueue, getDrivers, toggleStatus, exitQueue })(Fila)
 
 
 const styles = StyleSheet.create({

@@ -1,4 +1,4 @@
-import { GET_DRIVERS, SAVE_DRIVER, UPDATE_DRIVER, REMOVE_DRIVER, TOGGLE_DRIVER } from "../actions/driver";
+import { GET_DRIVERS, SAVE_DRIVER, UPDATE_DRIVER, REMOVE_DRIVER, TOGGLE_DRIVER, EXIT_QUEUE } from "../actions/driver";
 import _ from 'lodash'
 
 
@@ -15,6 +15,8 @@ export default (state = [], action) => {
         case REMOVE_DRIVER:
             return {...state, driverList: state.driverList.filter(f => f.id != action.driver_id)}
         case TOGGLE_DRIVER:
+            return {...state, driverList: _.sortBy([...state.driverList.filter(f => f.id != action.payload.data.id), action.payload.data], u => u.name)}
+        case EXIT_QUEUE:
             return {...state, driverList: _.sortBy([...state.driverList.filter(f => f.id != action.payload.data.id), action.payload.data], u => u.name)}
 
 

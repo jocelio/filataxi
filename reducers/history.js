@@ -1,4 +1,5 @@
 import { GET_HISTORY } from './../actions/history'
+import _ from "lodash"
 
 
 export default (state = [], action) => {
@@ -6,7 +7,7 @@ export default (state = [], action) => {
     switch (action.type) {
 
         case GET_HISTORY:
-            return {...state, historyList: action.payload.data}
+            return {...state, historyList: _.orderBy(action.payload.data, h => h.id, "desc")}
 
         default:
             return state;

@@ -57,8 +57,8 @@ class Driver extends Component {
                       onPress={() => ActionSheet.show(
                           {
                             options: ["Editar", "Excluir", driver.enabled? "Desativar": 'Ativar',"Cancel"],
-                            cancelButtonIndex: 4,
-                            title: "Ações"
+                            cancelButtonIndex: 3,
+                            
                           },
                           buttonIndex => {
                             this.action(buttonIndex, driver)

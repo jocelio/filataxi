@@ -4,9 +4,11 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Text, View, ListView, ActivityIndicator, StyleSheet, Alert, TouchableHighlight } from "react-native";
-import { Button, Container, Content,  List, ListItem, Body } from 'native-base'
+import { Button, Container, Content,  List, ListItem, Body, Tab, Tabs } from 'native-base'
 import MenuSettings from "../common/MenuSettings";
 import CustomHeader from '../common/CustomHeader'
+import _ from 'lodash'
+import moment from 'moment'
 
 import { getHistory } from '../../actions/history';
 
@@ -26,6 +28,19 @@ class History extends Component {
         });
     }
 
+    makeHistoryList(histories){
+      return <List
+      dataArray={histories}
+      renderRow={ history =>
+         <ListItem key={history.id}>
+           <Body>
+             <Text>{history.description}</Text>
+             <Text note>- {moment(history.date).format('DD/MM/YYYY HH:mm:ss')}</Text>
+           </Body>
+          </ListItem>
+      }/>
+    }
+
     render(){
 
     const comp = (this.state.loading) ?
@@ -36,15 +51,16 @@ class History extends Component {
                 size="large"
             />
         </View>
-        :<List
-        dataArray={this.props.historyList}
-        renderRow={ history =>
-           <ListItem key={history.id}>
-             <Body>
-               <Text>{history.description}</Text>
-             </Body>
-            </ListItem>
-        }/>
+        :
+        <Tabs initialPage={0}>
+          <Tab heading="Global">
+            {this.makeHistoryList(this.props.historyList)}
+          </Tab>
+          <Tab heading="Individual">
+            {this.makeHistoryList(_(this.props.historyList).filter(h => h.idDriver == this.props.appDriver.id).value())}
+          </Tab>
+        </Tabs>
+
 
         return (
             <Container>
@@ -54,10 +70,10 @@ class History extends Component {
                 <Content contentContainerStyle={{ flex: 2, alignItems: 'center', padding: 10}}
                 alwaysBounceVertical={false}>
 
-                    <Text>Historico</Text>
+                    <View style={{width:'100%', height: '100%'}}>
 
-                    <View style={{width:'100%'}}>
-                      {comp}
+                    {comp}
+
                     </View>
 
                 </Content>
@@ -72,7 +88,8 @@ class History extends Component {
 
 function mapStateToProps(state) {
     return {
-        historyList: state.historyReducer.historyList
+        historyList: state.historyReducer.historyList,
+        appDriver:  state.loginReducer.appDriver
     }
 }
 

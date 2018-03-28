@@ -10,6 +10,7 @@ export const UPDATE_DRIVER = 'UPDATE_DRIVER'
 export const ENQUEUE_DRIVER = 'ENQUEUE_DRIVER'
 export const REMOVE_DRIVER = 'REMOVE_DRIVER'
 export const TOGGLE_DRIVER = 'TOGGLE_DRIVER'
+export const EXIT_QUEUE= 'EXIT_QUEUE'
 
 const axios = axiosInstance();
 
@@ -49,6 +50,13 @@ export const toggleStatus = driver => {
 
   return {
       type: TOGGLE_DRIVER,
-      payload: axios.post(`/driver/${endPoint}/${driver.id}`)
+      payload: axios.post(`/driver/${endPoint}/${driver.id}/`)
+  }
+}
+
+export const exitQueue = driver => {
+  return {
+      type: EXIT_QUEUE,
+      payload: axios.post(`/driver/exit-queue/${driver.id}`)
   }
 }
