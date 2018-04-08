@@ -31,11 +31,11 @@ class History extends Component {
     makeHistoryList(histories){
       return <List
       dataArray={histories}
-      renderRow={ history =>
-         <ListItem key={history.id}>
+      renderRow={ h =>
+         <ListItem key={h.id}>
            <Body>
-             <Text>{history.description}</Text>
-             <Text note>- {moment(history.date).format('DD/MM/YYYY HH:mm:ss')}</Text>
+             <Text>{h.description}</Text>
+             <Text note>- {moment(h.time).format('DD/MM/YYYY HH:mm:ss')}</Text>
            </Body>
           </ListItem>
       }/>

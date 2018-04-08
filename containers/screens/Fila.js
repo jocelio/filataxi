@@ -80,7 +80,9 @@ class Fila extends Component {
 
                 <Content alwaysBounceVertical={false}>
 
-                  {_.isEmpty(this.props.filaList) && !this.state.loading ? <Text>Fila não criada</Text>: comp }
+                  {_.isEmpty(this.props.filaList) && !this.state.loading
+                      ? <View style={{alignItems:'center'}}><Text>Fila não criada</Text></View>
+                      : comp }
 
                 </Content>
 
@@ -100,14 +102,14 @@ class Fila extends Component {
                     </Button>
                   }
 
-                  {this.props.isUserAdmin &&
-                  <Button style={{ backgroundColor: '#7f8c8d' }}
-                    onPress={() => this.addDriver()} disabled={_(this.props.driverList).filter(d => !d.enabled).isEmpty()}>
+                  {(this.props.isUserAdmin && (!_(this.props.driverList).filter(d => !d.enabled).isEmpty())) &&
+                  <Button style={{ backgroundColor: '#7f8a8d' }}
+                    onPress={() => this.addDriver()} >
                     <MaterialIcons name='add' size={24} />
                   </Button>
                   }
 
-                  {this.props.isUserAdmin &&
+                  {(this.props.isUserAdmin && !_.isEmpty(this.props.filaList)) &&
                   <Button style={{ backgroundColor: '#2ecc71' }}
                           onPress={() => this.nextQueue()}>
                     <MaterialIcons name='list' size={24} />
@@ -136,14 +138,18 @@ class Fila extends Component {
     }
 
     addDriver(){
+      console.log('addDriver')
        const driverNames = this.props.driverList.filter(d => !d.enabled).map(d => d.name);
+
        return ActionSheet.show({
                 options: [...driverNames, 'Cancelar'],
                 cancelButtonIndex: _.size(driverNames),
             },
             buttonIndex => {
+              if(_.size(driverNames) != buttonIndex){
                 const driver = _(this.props.driverList).filter(f => f.name == driverNames[buttonIndex]).first()
                 this.props.toggleStatus(driver).then(() => this.props.getFila())
+              }
             }
         )
     }

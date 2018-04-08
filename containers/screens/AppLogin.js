@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         , marginTop:10
         , fontSize:22
         , fontWeight: 'bold'
-        , fontFamily: 'Zapfino'
+        , fontFamily: 'Roboto'
     },
     logoContainer:{
          alignItems: 'center'

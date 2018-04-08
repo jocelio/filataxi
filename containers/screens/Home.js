@@ -33,8 +33,6 @@ class Home extends Component {
                 <Content contentContainerStyle={{ flex: 2, alignItems: 'center', justifyContent: 'center', padding: 10}}
                 alwaysBounceVertical={false}>
 
-                    <Text>Home Screen :D</Text>
-
                     <Button onPress={() => onSignOut().then(() => this.props.navigation.navigate("SignedOut"))}
                     full style={{marginBottom: 4}}>
                         <Text style={{ color: 'white' }}>Sair</Text>
@@ -42,13 +40,9 @@ class Home extends Component {
 
                     <Button onPress={() => onSignOut().then(() => this.props.initDrivers().then(() => Alert.alert("Feito")) )}
                     full style={{marginBottom: 4}}>
-                        <Text style={{ color: 'white' }}>Init </Text>
+                        <Text style={{ color: 'white' }}> Motoristas </Text>
                     </Button>
 
-                    <Button onPress={() => onSignOut().then(() => this.props.enqueueDrivers().then(() => Alert.alert("Feito")))}
-                    full style={{marginBottom: 4}}>
-                        <Text style={{ color: 'white' }}>Enfileirar</Text>
-                    </Button>
 
                 </Content>
 
