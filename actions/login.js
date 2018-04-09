@@ -38,10 +38,14 @@ export const loggedDriver = email => (
 )
 
 export const isAdmin = token => {
-  const tokenData = parseJwt(token)
-  const roles = tokenData['https://filataxi.com/user_metadata'].roles
-  const isAdmin = !_(roles).filter(f => f == "admin").isEmpty()
-  return {type: USER_ADMIN, payload: isAdmin}
+  try{
+      const tokenData = parseJwt(token)
+      const roles = tokenData['https://filataxi.com/user_metadata'].roles
+      const isAdmin = !_(roles).filter(f => f == "admin").isEmpty()
+      return {type: USER_ADMIN, payload: isAdmin}
+    }catch(ignired){
+      return {type: USER_ADMIN, payload: false}
+    }
 }
 
 const parseJwt = token => {

@@ -55,8 +55,8 @@ class LoginForm extends Component {
     doLogin(){
         this.setState({loading: true})
         this.props.login({
-            "username": this.state.user || 'jclls@hotmail.com',
-            "password": this.state.password || 'zgyMTNjYjI3Yzc5ZjA'
+            "username": this.state.user, // || 'jclls@hotmail.com',
+            "password": this.state.password, // || 'zgyMTNjYjI3Yzc5ZjA'
         }).then(() => {
             if (!this.props.loginData || !this.props.loginData.access_token) {
                 Alert.alert("Usuário ou senha incorretos.")
