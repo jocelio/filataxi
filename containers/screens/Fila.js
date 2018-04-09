@@ -138,7 +138,6 @@ class Fila extends Component {
     }
 
     addDriver(){
-      console.log('addDriver')
        const driverNames = this.props.driverList.filter(d => !d.enabled).map(d => d.name);
 
        return ActionSheet.show({

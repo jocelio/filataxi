@@ -53,6 +53,7 @@ class LoginForm extends Component {
     }
 
     doLogin(){
+        this.setState({loading: true})
         this.props.login({
             "username": this.state.user || 'jclls@hotmail.com',
             "password": this.state.password || 'zgyMTNjYjI3Yzc5ZjA'
@@ -61,7 +62,6 @@ class LoginForm extends Component {
                 Alert.alert("Usuário ou senha incorretos.")
                 throw "Usuário ou senha incorretos."
             }
-
             return this.props.isAdmin(this.props.loginData.id_token)
         }).then(() => {
             return AsyncStorage.multiSet([["access_token",this.props.loginData.access_token],["admin", this.props.isUserAdmin? "true":"false"]])
@@ -70,7 +70,12 @@ class LoginForm extends Component {
         }).then(() => {
             return AsyncStorage.setItem("userInfo", JSON.stringify(this.props.userInfoData))
         }).then(() => {
-            return this.props.loggedDriver(this.props.userInfoData.name.replace(".com",""))
+          try{
+              return this.props.loggedDriver(this.props.userInfoData.name.replace(".com",""))
+          }catch(e) {
+              console.log(e)
+              return null;
+          }
         }).then(() => {
             return AsyncStorage.setItem("driver", JSON.stringify(this.props.appDriver || ''))
         }).then(() => {
@@ -78,9 +83,9 @@ class LoginForm extends Component {
             return this.props.navigation.navigate("SignedIn")
         }).catch( e =>{
             this.setState({loading: false})
-            console.log(e)
+            Alert.alert(e)
         })
-        this.setState({loading: true})
+
     }
 
 }

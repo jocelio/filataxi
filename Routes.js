@@ -29,7 +29,7 @@ const SignedIn = DrawerNavigator(
                     DriverNew: { screen: DriverNew, navigationOptions: { title:'Motorista' } }
                   }),
         },
-        History:{
+        Historico:{
             path:'/history',
             screen: History,
         },
